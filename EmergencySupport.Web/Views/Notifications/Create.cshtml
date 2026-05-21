@@ -1,0 +1,61 @@
+﻿@model EmergencySupport.Entities.Notifications
+
+@Html.Partial("_Message")
+
+<div class="container border mt-4 p-4">
+
+    <div class="row">
+        <div class="col-12">
+
+            @if (Model.NotificationId == 0)
+            {
+                <h2>Create Emergency Notification</h2>
+            }
+            else
+            {
+                <h2>Emergency Notification #@Model.NotificationId</h2>
+            }
+
+        </div>
+
+        <hr />
+    </div>
+
+    <form method="post">
+
+        <input type="hidden" asp-for="NotificationId" />
+
+        <div class="mb-3">
+            <label asp-for="Type" class="form-label"></label>
+
+            <input asp-for="Type" class="form-control" />
+
+            <span asp-validation-for="Type" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Message" class="form-label"></label>
+
+            <input asp-for="Message" class="form-control" />
+
+            <span asp-validation-for="Message" class="text-danger"></span>
+        </div>
+
+
+
+        <button type="submit" class="btn btn-info">
+            <i class="bi bi-floppy-fill"></i> &nbsp; Save
+        </button>
+
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-box-arrow-left"></i> &nbsp; Back
+        </a>
+
+    </form>
+
+</div>
+
+@section Scripts
+{
+    @Html.Partial("_ValidationScriptsPartial")
+}

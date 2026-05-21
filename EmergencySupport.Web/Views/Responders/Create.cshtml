@@ -1,0 +1,125 @@
+﻿@model EmergencySupport.Entities.Responders
+
+@Html.Partial("_Message")
+
+<script>
+    navigator.geolocation.getCurrentPosition(function (position) {
+
+        document.getElementById("CurrentLatitude").value =
+            position.coords.latitude;
+
+        document.getElementById("CurrentLongitude").value =
+            position.coords.longitude;
+
+    });
+</script>
+
+<div class="container border mt-4 p-4">
+
+    <div class="row">
+
+        <div class="col-12">
+
+            @if (Model.ResponderId == 0)
+            {
+                <h2>Add Responder</h2>
+            }
+            else
+            {
+                <h2>
+                    Responder #@Model.ResponderId
+                </h2>
+            }
+
+        </div>
+
+        <hr />
+    </div>
+
+    <form method="post">
+
+        <input type="hidden" asp-for="ResponderId" />
+
+        <div class="mb-3">
+
+            <label asp-for="UserId" class="form-label"></label>
+
+            <select asp-for="UserId" asp-items="@ViewBag.UserList" class="form-control">
+
+                <option disabled>
+                    Select User
+                </option>
+
+            </select>
+
+            <span asp-validation-for="UserId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+
+            <label asp-for="ServiceType" class="form-label"></label>
+
+            <input asp-for="ServiceType" class="form-control" />
+
+            <span asp-validation-for="ServiceType" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+
+            <label asp-for="AvailabilityStatus" class="form-label"></label>
+
+            <select asp-for="AvailabilityStatus" class="form-control">
+
+                <option value="Available">
+                    Available
+                </option>
+
+                <option value="Busy">
+                    Busy
+                </option>
+
+            </select>
+
+            <span asp-validation-for="AvailabilityStatus" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+
+            <label asp-for="CurrentLatitude" class="form-label"></label>
+
+            <input asp-for="CurrentLatitude" class="form-control" />
+
+            <span asp-validation-for="CurrentLatitude" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+
+            <label asp-for="CurrentLongitude" class="form-label"></label>
+
+            <input asp-for="CurrentLongitude" class="form-control" />
+
+            <span asp-validation-for="CurrentLongitude" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-info">
+
+            <i class="bi bi-floppy-fill"></i>
+            &nbsp; Submit
+
+        </button>
+
+        <a asp-action="Index" class="btn btn-secondary">
+
+            <i class="bi bi-box-arrow-left"></i>
+            &nbsp; Back
+
+        </a>
+
+    </form>
+
+</div>
+
+@section Scripts
+{
+    @Html.Partial("_ValidationScriptsPartial")
+}

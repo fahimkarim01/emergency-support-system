@@ -1,0 +1,188 @@
+﻿@model List<EmergencySupport.Entities.EmergencyRequests>
+
+@Html.Partial("_Message")
+
+<div class="row pt-4">
+
+    <div class="col-6">
+        <h2>Emergency Requests</h2>
+    </div>
+
+    <div class="col-6 text-end">
+
+        @if (User.IsInRole("user"))
+        {
+            <a class="btn btn-primary"
+               asp-action="Create"
+               asp-route-dataId="-1">
+
+                <i class="bi bi-plus-lg"></i> &nbsp; Add Request
+            </a>
+        }
+
+    </div>
+
+    <hr />
+</div>
+
+<table class="table table-bordered table-hover">
+
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Emergency Type</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @if (Model.Count == 0)
+        {
+            <tr>
+                <td colspan="7"
+                    class="text-center">
+                    No Data To Show
+                </td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>@item.RequestId</td>
+
+                    <td>@item.User.Name</td>
+
+                    <td>@item.EmergencyType</td>
+
+                    <td>
+                        @if (User.IsInRole("user"))
+                        {
+                            @item.PriorityLevel
+                        }
+
+                        @if (User.IsInRole("responder"))
+                        {
+                            @item.PriorityLevel
+                        }
+
+                        @if (User.IsInRole("emergency operator"))
+                        {
+                            <a asp-action="SetPriority"
+                               asp-route-id="@item.RequestId"
+                               asp-route-priority="Low"
+                               class="btn btn-warning btn-sm">
+
+                                Low
+                            </a>
+
+                            <a asp-action="SetPriority"
+                               asp-route-id="@item.RequestId"
+                               asp-route-priority="Medium"
+                               class="btn btn-success btn-sm">
+
+                                Medium
+                            </a>
+
+                            <a asp-action="SetPriority"
+                               asp-route-id="@item.RequestId"
+                               asp-route-priority="High"
+                               class="btn btn-success btn-sm">
+
+                                High
+                            </a>
+                        }
+                    </td>
+
+                    <td>
+
+                        @if (item.Status == "Pending")
+                        {
+                            <span class="badge bg-warning text-dark">
+                                @item.Status
+                            </span>
+                        }
+                        else if (item.Status == "Assigned")
+                        {
+                            <span class="badge bg-primary">
+                                @item.Status
+                            </span>
+                        }
+                        else if (item.Status == "Completed")
+                        {
+                            <span class="badge bg-success">
+                                @item.Status
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+                                @item.Status
+                            </span>
+                        }
+
+                    </td>
+
+                    <td>@item.Latitude</td>
+
+                    <td>@item.Longitude</td>
+
+                    <td>
+
+                        @if (User.IsInRole("user"))
+                        {
+                            <a asp-action="Create"
+                               asp-route-dataId="@item.RequestId"
+                               class="btn btn-success btn-sm">
+
+                                <i class="bi bi-pencil-square"></i>
+                                &nbsp; Edit
+                            </a>
+
+                            <a asp-action="Delete"
+                               asp-route-dataId="@item.RequestId"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Are you sure?')">
+
+                                <i class="bi bi-trash"></i>
+                                &nbsp; Delete
+                            </a>
+                        }
+
+                        @if (User.IsInRole("emergency operator")
+                                        || User.IsInRole("responder"))
+                        {
+                            <a asp-action="UpdateStatus"
+                               asp-route-id="@item.RequestId"
+                               asp-route-status="Assigned"
+                               class="btn btn-warning btn-sm">
+
+                                Assign
+                            </a>
+
+                            <a asp-action="UpdateStatus"
+                               asp-route-id="@item.RequestId"
+                               asp-route-status="Completed"
+                               class="btn btn-success btn-sm">
+
+                                Complete
+                            </a>
+                        }
+
+                    </td>
+
+                </tr>
+            }
+        }
+
+    </tbody>
+
+</table>

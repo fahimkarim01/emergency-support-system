@@ -1,0 +1,52 @@
+﻿@model EmergencySupport.Models.LoginModel
+
+@Html.Partial("_Message")
+
+<div class="row pt-5">
+
+    <div class="col-3"></div>
+
+    <div class="col-6 border p-4">
+
+        <h1>Login</h1>
+
+        <hr />
+
+        <form method="post">
+
+            <div class="mb-3">
+
+                <label asp-for="Email"></label>
+
+                <input type="email" asp-for="Email" class="form-control" />
+
+                <span asp-validation-for="Email" class="text-danger"></span>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label asp-for="Password"></label>
+
+                <input type="password" asp-for="Password" class="form-control" />
+
+                <span asp-validation-for="Password" class="text-danger"></span>
+
+            </div>
+
+            <button type="submit" class="btn btn-info">
+                Login
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="col-3"></div>
+
+</div>
+
+@section Scripts
+{
+    @Html.Partial("_ValidationScriptsPartial")
+}

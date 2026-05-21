@@ -1,0 +1,67 @@
+﻿@model List<EmergencySupport.Entities.Assignments>
+
+@Html.Partial("_Message")
+
+<div class="row pt-4">
+
+    <div class="col-6">
+        <h2>Emergency Assignments</h2>
+    </div>
+
+    <div class="col-6 text-end">
+
+        <a class="btn btn-primary"
+           asp-action="Create"
+           asp-route-dataId="-1">
+
+            <i class="bi bi-plus-lg"></i> &nbsp; Add Assignment
+        </a>
+
+    </div>
+
+    <hr />
+</div>
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Request</th>
+            <th>Responder</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model.Count == 0)
+        {
+            <tr>
+                <td colspan="7"
+                    class="text-center">
+                    No Data To Show
+                </td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.AssignmentId</td>
+                    <td>@item.Request?.EmergencyType</td>
+                    <td>@item.Responder?.User?.Name</td>
+                    <td>@item.Status</td>
+                    <td>
+                        <a asp-action="Create" asp-route-dataId="@item.AssignmentId" class="btn btn-success">
+                            <i class="bi bi-pencil-square"></i> &nbsp; Edit
+                        </a>
+
+                        <a asp-action="Delete" asp-route-dataId="@item.AssignmentId" class="btn btn-danger" onclick="return confirm('Are you sure?')">
+                            <i class="bi bi-trash"></i> &nbsp; Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

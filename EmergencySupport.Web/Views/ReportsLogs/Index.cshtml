@@ -1,0 +1,47 @@
+﻿@model List<EmergencySupport.Entities.ReportsLogs>
+
+@Html.Partial("_Message")
+
+<div class="row pt-4">
+
+    <div class="col-6">
+        <h2>Reports/Logs</h2>
+    </div>
+
+    <hr />
+</div>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Action</th>
+            <th>Details</th>
+            <th>Time</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model.Count == 0)
+        {
+            <tr>
+                <td colspan="7"
+                    class="text-center">
+                    No Data To Show
+                </td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.LogId</td>
+                    <td>@item.Action</td>
+                    <td>@item.Details</td>
+                    <td>@item.Timestamp</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

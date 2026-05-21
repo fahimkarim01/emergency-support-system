@@ -1,0 +1,43 @@
+﻿@if (string.IsNullOrEmpty(ViewBag.Error) == false)
+{
+    <div class="alert alert-danger alert-dismissible mt-2">
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"></button>
+
+        <strong>@ViewBag.Error</strong>
+    </div>
+}
+
+@if (string.IsNullOrEmpty(ViewBag.Success) == false)
+{
+    <div class="alert alert-success alert-dismissible mt-2">
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"></button>
+
+        <strong>@ViewBag.Success</strong>
+    </div>
+}
+
+@if (string.IsNullOrEmpty(TempData["Error"]?.ToString()) == false)
+{
+    <div class="alert alert-danger alert-dismissible mt-2">
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"></button>
+
+        <strong>@TempData["Error"]</strong>
+    </div>
+}
+
+@if (string.IsNullOrEmpty(TempData["Success"]?.ToString()) == false)
+{
+    <div class="alert alert-success alert-dismissible mt-2">
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"></button>
+
+        <strong>@TempData["Success"]</strong>
+    </div>
+}

@@ -1,0 +1,121 @@
+﻿@model EmergencySupport.Entities.EmergencyRequests
+
+@Html.Partial("_Message")
+
+<div class="container border mt-4 p-4">
+
+    <div class="row">
+        <div class="col-12">
+
+            @if (Model.RequestId == 0)
+            {
+                <h2>Create Emergency Request</h2>
+            }
+            else
+            {
+                <h2>Emergency Request #@Model.RequestId</h2>
+            }
+
+        </div>
+
+        <hr />
+    </div>
+
+    <form method="post">
+
+        <input type="hidden" asp-for="RequestId" />
+
+        <input type="hidden" asp-for="UserId" />
+
+        <div class="mb-3">
+            <label asp-for="EmergencyType" class="form-label"></label>
+
+            <select asp-for="EmergencyType" class="form-control">
+
+                <option value="Fire"> Fire </option>
+                <option value="Medical"> Medical </option>
+                <option value="Crime"> Crime </option>
+                <option value="Accident"> Accident </option>
+
+            </select>
+
+            <span asp-validation-for="EmergencyType" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+
+            <textarea asp-for="Description" class="form-control"></textarea>
+
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Latitude" class="form-label"></label>
+
+            <input asp-for="Latitude" class="form-control" readonly />
+
+            <span asp-validation-for="Latitude" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Longitude" class="form-label"></label>
+
+            <input asp-for="Longitude" class="form-control" readonly />
+
+            <span asp-validation-for="Longitude" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-info">
+            <i class="bi bi-floppy-fill"></i> &nbsp; Submit
+        </button>
+
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-box-arrow-left"></i> &nbsp; Back
+        </a>
+
+    </form>
+
+</div>
+
+@section Scripts
+{
+    @Html.Partial("_ValidationScriptsPartial")
+
+    <script>
+
+        function getLocation()
+        {
+            if (navigator.geolocation)
+            {
+                navigator.geolocation.getCurrentPosition(
+                    showPosition,
+                    showError
+                );
+            }
+            else
+            {
+                alert("Geolocation is not supported.");
+            }
+        }
+
+        function showPosition(position)
+        {
+            document.getElementById("Latitude").value =
+                position.coords.latitude;
+
+            document.getElementById("Longitude").value =
+                position.coords.longitude;
+        }
+
+        function showError(error)
+        {
+            alert("Unable to get location.");
+        }
+
+        window.onload = function () {
+            getLocation();
+        };
+
+    </script>
+}

@@ -1,0 +1,107 @@
+﻿@model EmergencySupport.Entities.Feedback
+
+@Html.Partial("_Message")
+
+<div class="container border mt-4 p-4">
+
+    <div class="row">
+        <div class="col-12">
+
+            @if (Model.FeedbackId == 0)
+            {
+                <h2>Create Emergency Feedback</h2>
+            }
+            else
+            {
+                <h2>Emergency Feedback #@Model.FeedbackId</h2>
+            }
+
+        </div>
+
+        <hr />
+    </div>
+
+    <form method="post">
+
+        <input type="hidden" asp-for="FeedbackId" />
+
+        <div class="mb-3">
+            <label asp-for="RequestId" class="form-label"></label>
+
+            <select asp-for="RequestId" asp-items="@ViewBag.RequestList" class="form-control">
+                <option disabled="disabled">Select Emergency Request</option>
+            </select>
+
+            <span asp-validation-for="RequestId" class="text-danger"></span>
+        </div>
+
+        <input type="hidden" asp-for="UserId" />
+
+        <div class="mb-3">
+            <label asp-for="UserId" class="form-label"></label>
+
+            <input value="@User.Identity.Name" class="form-control" readonly />
+        </div>
+
+        <div class="mb-3">
+
+            <label asp-for="Rating" class="form-label d-block"></label>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" asp-for="Rating" value="1" />
+
+                <label class="form-check-label"> 1 </label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" asp-for="Rating" value="2" />
+
+                <label class="form-check-label"> 2 </label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" asp-for="Rating" value="3" />
+
+                <label class="form-check-label"> 3 </label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" asp-for="Rating" value="4" />
+
+                <label class="form-check-label"> 4 </label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" asp-for="Rating" value="5" />
+
+                <label class="form-check-label"> 5 </label>
+            </div>
+
+            <span asp-validation-for="Rating" class="text-danger"></span>
+
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Comments" class="form-label"></label>
+
+            <textarea asp-for="Comments" class="form-control"></textarea>
+
+            <span asp-validation-for="Comments" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-info">
+            <i class="bi bi-floppy-fill"></i> &nbsp; Save
+        </button>
+
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-box-arrow-left"></i> &nbsp; Back
+        </a>
+
+    </form>
+
+</div>
+
+@section Scripts
+{
+    @Html.Partial("_ValidationScriptsPartial")
+}
