@@ -272,7 +272,7 @@ sequenceDiagram
 
 ## Author
 
-**Your Name**  
+**Md. Fahim Karim**  
 .NET Developer · Full-Stack ASP.NET Core
 
 [![GitHub](https://img.shields.io/badge/GitHub-@fahimkarim01-181717?style=flat&logo=github)](https://github.com/fahimkarim01)
