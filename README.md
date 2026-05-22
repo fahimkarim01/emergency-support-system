@@ -310,7 +310,7 @@ Building this project strengthened my understanding of:
 **Your Name**  
 .NET Developer · Full-Stack ASP.NET Core
 
-[![GitHub](https://img.shields.io/badge/GitHub-@your--username-181717?style=flat&logo=github)](https://github.com/fahimkarim01)
+[![GitHub](https://img.shields.io/badge/GitHub-@fahimkarim01-181717?style=flat&logo=github)](https://github.com/fahimkarim01)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)](https://www.linkedin.com/in/mdfahimkarim/)
 
 > Replace placeholders above with your actual name and profile links before publishing.
