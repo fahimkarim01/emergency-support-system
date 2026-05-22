@@ -270,41 +270,6 @@ sequenceDiagram
 
 ---
 
-## Screenshots
-
-> Add 2–3 screenshots here to significantly improve first impressions for recruiters and hiring managers.
-
-| Dashboard | Emergency Requests | Assignments |
-|:---------:|:------------------:|:-----------:|
-| *Coming soon* | *Coming soon* | *Coming soon* |
-
----
-
-## Roadmap & Improvements
-
-Planned enhancements that reflect continued professional growth:
-
-- [ ] ASP.NET Core Identity with password hashing
-- [ ] Unit and integration tests (xUnit, WebApplicationFactory)
-- [ ] Real-time updates with SignalR
-- [ ] Map-based responder tracking (e.g. Leaflet / Azure Maps)
-- [ ] CI/CD pipeline (GitHub Actions)
-- [ ] Docker support for local and cloud deployment
-
----
-
-## What I Learned
-
-Building this project strengthened my understanding of:
-
-- Structuring maintainable **multi-project .NET solutions**
-- Applying the **repository pattern** without over-abstracting
-- Implementing **authentication and role-based authorization** in ASP.NET Core
-- Modeling a **relational domain** with EF Core and SQL Server
-- Exposing the same data through **MVC** and a **REST API**
-
----
-
 ## Author
 
 **Your Name**  
@@ -313,7 +278,7 @@ Building this project strengthened my understanding of:
 [![GitHub](https://img.shields.io/badge/GitHub-@fahimkarim01-181717?style=flat&logo=github)](https://github.com/fahimkarim01)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)](https://www.linkedin.com/in/mdfahimkarim/)
 
-> Replace placeholders above with your actual name and profile links before publishing.
+
 
 ---
 
