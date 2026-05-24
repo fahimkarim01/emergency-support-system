@@ -1,294 +1,200 @@
-# Emergency Support System
+# Emergency Support
 
-**A production-style emergency response platform built with ASP.NET Core 8 — designed to demonstrate enterprise .NET skills recruiters look for.**
+Web application for managing emergency requests, responders, assignments, notifications, feedback, and activity logs. The solution includes an ASP.NET Core MVC site for day-to-day use and a separate Web API project that exposes CRUD endpoints for selected entities.
 
-[![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?style=flat&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
-[![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-MVC%20%2B%20Web%20API-512BD4?style=flat)](https://dotnet.microsoft.com/apps/aspnet)
-[![Entity Framework Core](https://img.shields.io/badge/EF%20Core-8.0-512BD4?style=flat)](https://learn.microsoft.com/ef/core/)
-[![SQL Server](https://img.shields.io/badge/SQL%20Server-Database-CC2927?style=flat&logo=microsoftsqlserver&logoColor=white)](https://www.microsoft.com/sql-server)
-[![Architecture](https://img.shields.io/badge/Architecture-Layered%20%2B%20Repository-blue?style=flat)](https://github.com)
+## Overview
 
----
+Users sign up, log in, and work through Razor views backed by repository classes and Entity Framework Core. Emergency requests store location coordinates, type, description, status, and priority. Operators and responders can update request status; operators can set priority levels. Assignments link requests to responders. Feedback can be submitted for completed requests.
 
-## Executive Summary
-
-**Emergency Support System** is a full-stack web application for coordinating emergency incidents end-to-end: from citizen or staff reporting, through operator triage and prioritization, to responder dispatch, status tracking, notifications, feedback, and audit logging.
-
-The solution is structured as a **multi-project .NET solution** with clear separation of concerns — the same architectural approach used in professional enterprise codebases. It showcases skills directly relevant to **backend / full-stack .NET developer** roles: MVC, Web API, EF Core, SQL Server, authentication, authorization, and maintainable data access patterns.
-
----
-
-## Why This Project Matters
-
-| Business problem | How the system addresses it |
-|------------------|------------------------------|
-| Fragmented emergency reporting | Centralized emergency request intake with type, description, and GPS coordinates |
-| Slow dispatch | Assignment workflow linking requests to available responders |
-| Lack of visibility | Status and priority management with role-based dashboards |
-| Accountability | Reports/logs, notifications, and post-incident feedback |
-
----
-
-## Key Highlights for Recruiters
-
-- **Layered solution architecture** — 7 projects with single responsibility per layer  
-- **Repository pattern** with a unified `Result<T>` wrapper for predictable error handling  
-- **Claims-based cookie authentication** with role-driven authorization on controllers  
-- **Dual entry points** — MVC web app for operations + REST API with Swagger  
-- **Entity Framework Core 8** with SQL Server and relational domain modeling  
-- **Real-world domain modeling** — Users, requests, responders, assignments, notifications, feedback, audit logs  
-
----
-
-## Tech Stack
-
-| Layer | Technologies |
-|-------|----------------|
-| **Backend** | C#, .NET 8, ASP.NET Core MVC, ASP.NET Core Web API |
-| **Data** | Entity Framework Core 8, Microsoft SQL Server |
-| **Patterns** | Repository pattern, layered architecture, dependency injection |
-| **Security** | Cookie authentication, claims, role-based authorization |
-| **Frontend** | Razor Views, Bootstrap, jQuery Validation |
-| **API docs** | Swagger / OpenAPI (Development) |
-
----
+The API project shares the same SQL Server database and exposes CRUD endpoints for selected modules.
 
 ## Features
 
-### Authentication & Users
-- User registration and login with cookie-based authentication (`EsAuth`)
-- Role-based access: **Admin**, **User**, **Emergency Operator**, **Responder**
-- Claims for identity, role, user ID, and email
+**MVC (`EmergencySupport.Web`)**
 
-### Emergency Operations
-- **Emergency Requests** — Create, view, edit, and delete incidents with emergency type, description, latitude/longitude, priority, and status
-- **Responders** — Manage field personnel with service type, availability status, and current GPS location
-- **Assignments** — Dispatch responders to requests; track assigned, arrival, and completion times
-- **Status & Priority** — Operators and responders update request status; operators set priority levels
+- User registration and cookie-based login
+- Emergency requests: list, create, edit, delete (own requests only)
+- Request status updates (`Assigned`, `Completed`) for `emergency operator` and `responder`
+- Priority updates (`Low`, `Medium`, `High`) for `emergency operator`
+- Responders: list, create, edit, delete (users with `responder` role)
+- Assignments: list, create, delete
+- Notifications: list, create, edit, delete
+- Feedback: list, create, edit, delete (completed requests only for new feedback)
+- Reports logs: list and delete (`emergency operator` only)
 
-### Communication & Quality
-- **Notifications** — Per-user messages with read/unread tracking
-- **Feedback** — Ratings and comments tied to completed requests
-- **Reports & Logs** — Operator-facing audit trail of system actions
+**Web API (`EmergencySupport.API`)**
 
----
+- `Users` — GET all, GET by id, POST (create/update), DELETE
+- `Responders` — GET all, GET by id, POST (create/update), DELETE
+- `ReportsLogs` — GET all, GET by id, POST (create/update), DELETE
 
-## Solution Architecture
+## Tech Stack
 
-```mermaid
-flowchart TB
-    subgraph Presentation
-        WEB[EmergencySupport.Web<br/>ASP.NET Core MVC]
-        API[EmergencySupport.API<br/>REST + Swagger]
-    end
+| Layer | Technology |
+|-------|------------|
+| MVC app | ASP.NET Core 8 MVC, Razor Views |
+| API | ASP.NET Core 8 Web API, Swagger (Swashbuckle 6.6.2) |
+| ORM | Entity Framework Core 8.0.24 |
+| Database | SQL Server |
+| UI | Bootstrap (superhero theme), Bootstrap Icons (CDN), jQuery Validation |
 
-    subgraph Business
-        REPO[EmergencySupport.Repos<br/>Repository Layer]
-        SHARED[EmergencySupport.Shared<br/>Result, Helpers]
-        MODELS[EmergencySupport.Models<br/>View Models]
-    end
-
-    subgraph Data
-        DATA[EmergencySupport.Data<br/>EsupportDbContext]
-        ENT[EmergencySupport.Entities<br/>Domain Models]
-    end
-
-    DB[(SQL Server<br/>EsupportDb)]
-
-    WEB --> REPO
-    API --> DATA
-    WEB --> SHARED
-    REPO --> DATA
-    DATA --> ENT
-    DATA --> DB
-```
-
-### Project Structure
+## Solution Structure
 
 ```
 EmergencySupport.Web.sln
-│
-├── EmergencySupport.Web          # MVC UI, authentication, authorization
-├── EmergencySupport.API          # REST API endpoints
-├── EmergencySupport.Repos        # Repository layer (CRUD + business queries)
-├── EmergencySupport.Data         # EF Core DbContext
-├── EmergencySupport.Entities     # Domain entities / database models
-├── EmergencySupport.Models       # Login and view-specific models
-└── EmergencySupport.Shared       # Shared types (Result<T>, CurrentUserHelper)
+├── EmergencySupport.Web/          # MVC application
+├── EmergencySupport.API/          # Web API
+├── EmergencySupport.Data/         # EsupportDbContext
+├── EmergencySupport.Entities/     # Entity classes
+├── EmergencySupport.Repos/        # Repository classes (used by MVC)
+├── EmergencySupport.Models/       # LoginModel
+└── EmergencySupport.Shared/       # Result<T>, CurrentUserHelper
 ```
 
-### Design Decisions
-
-| Decision | Rationale |
-|----------|-----------|
-| **Repository pattern** | Decouples controllers from EF Core; easier to test and maintain |
-| **`Result<T>` responses** | Consistent success/error handling across the data layer |
-| **Shared DbContext** | Single source of truth for Web and API |
-| **Role-based authorization** | Enforces least-privilege access per user type |
-| **Separate API project** | Enables future mobile or third-party integrations |
-
----
-
-## Skills Demonstrated
-
-```
-✓ C# & .NET 8                    ✓ ASP.NET Core MVC
-✓ ASP.NET Core Web API           ✓ Entity Framework Core
-✓ SQL Server                     ✓ Dependency Injection
-✓ Repository Pattern             ✓ Layered Architecture
-✓ Authentication & Authorization ✓ Claims-based Security
-✓ RESTful API Design             ✓ Swagger / OpenAPI
-✓ Razor Views & Bootstrap        ✓ Error Handling Patterns
+```mermaid
+flowchart LR
+  Browser --> MVC[EmergencySupport.Web]
+  Client --> API[EmergencySupport.API]
+  MVC --> Repos[EmergencySupport.Repos]
+  Repos --> Data[EmergencySupport.Data]
+  API --> Data
+  Data --> SQL[(SQL Server EsupportDb)]
 ```
 
----
+The MVC app calls repositories, which use `EsupportDbContext`. The API uses the same `DbContext` without the repository layer.
 
-## Domain Model
+## Database
 
-| Entity | Purpose |
-|--------|---------|
-| `Users` | Accounts with role, contact info, and active status |
-| `EmergencyRequests` | Incident reports with location, priority, and status |
-| `Responders` | Field staff linked to users with availability and GPS |
-| `Assignments` | Request–responder dispatch with lifecycle timestamps |
-| `Notifications` | User alerts and read state |
-| `Feedback` | Post-incident ratings and comments |
-| `ReportsLogs` | Audit trail of actions |
+Database name: **EsupportDb**
 
----
+| Table | Purpose |
+|-------|---------|
+| Users | Accounts (name, email, password, phone, role, address) |
+| EmergencyRequests | Requests with type, description, coordinates, priority, status |
+| Responders | Responder profile linked to a user (service type, availability, location) |
+| Assignments | Links a request to a responder with status and timestamps |
+| Notifications | User notifications (message, type, read flag) |
+| Feedback | Rating and comments for a completed request |
+| ReportsLogs | User action logs |
 
-## Role-Based Access
+There are no EF Core migrations in this repository. The database and tables must already exist and match the entity definitions in `EmergencySupport.Entities`.
 
-| Role | Typical responsibilities |
-|------|--------------------------|
-| **User** | Submit and manage own emergency requests |
-| **Responder** | View assignments; update request status |
-| **Emergency Operator** | Set priorities, view reports/logs, coordinate incidents |
-| **Admin** | Full operational access including responder and assignment management |
+Default connection string (both projects):
 
----
-
-## Getting Started
-
-### Prerequisites
-
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-- [SQL Server](https://www.microsoft.com/sql-server) (Express or Developer edition)
-- Visual Studio 2022, VS Code, or Rider (recommended)
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/<your-username>/emergency-support-system.git
-cd emergency-support-system
+```
+Data Source=localhost\SQLEXPRESS01;Initial Catalog=EsupportDb;TrustServerCertificate=True;Integrated Security=True;
 ```
 
-### 2. Configure the database
-
-Update the connection string in both:
+Update `ConnectionStrings:EsupportDb` in:
 
 - `EmergencySupport.Web/appsettings.json`
 - `EmergencySupport.API/appsettings.json`
 
-```json
-{
-  "ConnectionStrings": {
-    "EsupportDb": "Server=localhost;Database=EsupportDb;Trusted_Connection=True;TrustServerCertificate=True;"
-  }
-}
-```
+## Authentication
 
-### 3. Create the database
+**MVC**
 
-Ensure SQL Server is running, then apply EF Core migrations from the solution root:
+- Cookie authentication scheme: `EsAuth`
+- Login: `/Auth/Login` — Access denied: `/Auth/Denied`
+- Session cookie expires after 30 minutes
+- Sign-up roles: `admin`, `user`, `emergency operator`, `responder`
+- Most controllers require `[Authorize]`; some actions restrict by role
+
+| Role | Examples |
+|------|----------|
+| `user` | Create/edit/delete own emergency requests; submit feedback |
+| `emergency operator` | Set request priority; update status; view/delete reports |
+| `responder` | Update request status; manage responders and assignments |
+| `admin` | Access responders and assignments controllers |
+
+Authentication is implemented using custom cookie-based authentication and role claims.
+
+**API**
+
+- No authentication or authorization configured on API controllers
+
+## Prerequisites
+
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- SQL Server (local instance; default config uses `localhost\SQLEXPRESS01`)
+- Database `EsupportDb` with tables matching the entity models
+
+## Setup
+
+From the solution root (folder containing `EmergencySupport.Web.sln`):
 
 ```bash
-dotnet ef database update --project EmergencySupport.Data --startup-project EmergencySupport.Web
+dotnet restore EmergencySupport.Web.sln
 ```
 
-> If migrations are not yet in the repository, generate them first:
-> ```bash
-> dotnet ef migrations add InitialCreate --project EmergencySupport.Data --startup-project EmergencySupport.Web
-> dotnet ef database update --project EmergencySupport.Data --startup-project EmergencySupport.Web
-> ```
+Set the SQL Server connection string in both `appsettings.json` files if your instance differs from the default.
 
-### 4. Run the web application
+## Running the Application
+
+Run the MVC site and API in separate terminals.
+
+**MVC**
 
 ```bash
 dotnet run --project EmergencySupport.Web
 ```
 
-Navigate to the HTTPS URL shown in the console. Register an account, sign in, and explore the workflow.
+Development URLs (`EmergencySupport.Web/Properties/launchSettings.json`):
 
-### 5. Run the API (optional)
+- HTTPS: `https://localhost:7019`
+- HTTP: `http://localhost:5001`
+
+**API**
 
 ```bash
 dotnet run --project EmergencySupport.API
 ```
 
-Open `/swagger` in Development to explore REST endpoints.
+Development URLs (`EmergencySupport.API/Properties/launchSettings.json`):
 
----
+- HTTPS: `https://localhost:7137`
+- HTTP: `http://localhost:5138`
+- Swagger UI: `/swagger` (Development only)
 
-## API Overview
+Register a user at `/Auth/Signup`, then log in at `/Auth/Login`.
 
-| Controller | Sample endpoints |
-|------------|------------------|
-| **Users** | `GET /api/Users/getUsers` · `GET /api/Users/byID/{id}` · `POST /api/Users` · `DELETE /api/Users/{id}` |
-| **Responders** | `GET /api/Responders/getResponders` · `GET /api/Responders/byID/{id}` |
-| **ReportsLogs** | CRUD operations for audit logs |
+## API Endpoints
 
-The API shares the same `EsupportDbContext` and SQL Server database as the MVC application.
+Base route: `api/[controller]`
 
----
+### Users
 
-## Typical Workflow
+| Method | Route | Description |
+|--------|-------|-------------|
+| GET | `api/Users/getUsers` | All users |
+| GET | `api/Users/byID/{id}` | User by id |
+| POST | `api/Users` | Create or update user |
+| DELETE | `api/Users/{id}` | Delete user |
 
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant O as Emergency Operator
-    participant R as Responder
-    participant S as System
+### Responders
 
-    U->>S: Submit emergency request (with GPS)
-    O->>S: Set priority & monitor status
-    O->>S: Create assignment (request + responder)
-    R->>S: Update status through lifecycle
-    S->>U: Send notification
-    U->>S: Submit feedback after resolution
-    O->>S: Review reports/logs
+| Method | Route | Description |
+|--------|-------|-------------|
+| GET | `api/Responders/getResponders` | All responders |
+| GET | `api/Responders/byID/{id}` | Responder by id |
+| POST | `api/Responders` | Create or update responder |
+| DELETE | `api/Responders/{id}` | Delete responder |
+
+### ReportsLogs
+
+| Method | Route | Description |
+|--------|-------|-------------|
+| GET | `api/ReportsLogs/getReports` | All report logs |
+| GET | `api/ReportsLogs/byID/{id}` | Log by id |
+| POST | `api/ReportsLogs` | Create or update log |
+| DELETE | `api/ReportsLogs/{id}` | Delete log |
+
+Example:
+
+```http
+GET https://localhost:7137/api/Users/getUsers
 ```
-
-1. **User** registers and signs in  
-2. **User** creates an emergency request with location and details  
-3. **Emergency Operator** sets priority and tracks status  
-4. **Admin / Operator** assigns a responder to the request  
-5. **Responder** updates status until completion  
-6. **User** receives notifications and submits feedback  
-7. **Operator** reviews audit logs for accountability  
-
----
-
-## Author
-
-**Md. Fahim Karim**  
-.NET Developer · Full-Stack ASP.NET Core
-
-[![GitHub](https://img.shields.io/badge/GitHub-@fahimkarim01-181717?style=flat&logo=github)](https://github.com/fahimkarim01)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)](https://www.linkedin.com/in/mdfahimkarim/)
-
-
-
----
 
 ## License
 
-This project was developed as a portfolio and academic demonstration.  
-Specify a license (e.g. [MIT](https://opensource.org/licenses/MIT)) or contact the author for usage terms.
-
----
-
-<p align="center">
-  <sub>Built with ASP.NET Core 8 · Entity Framework Core · SQL Server</sub>
-</p>
+This project is intended for educational purposes.
